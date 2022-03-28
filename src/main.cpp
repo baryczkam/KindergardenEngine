@@ -83,7 +83,7 @@ int main()
     // -------------------------
     Shader ourShader("D:/Users/wojci/CLionProjects/OpenGLPAG/res/shaders/model.vert", "D:/Users/wojci/CLionProjects/OpenGLPAG/res/shaders/model.frag");
 
-    Shader lightingShader("D:/Users/wojci/CLionProjects/OpenGLPAG/res/shaders/lightcaster.vert", "D:/Users/wojci/CLionProjects/OpenGLPAG/res/shaders/lightcaster.frag");
+    Shader lightingShader("../../res/shaders/lightcaster.vert", "../../res/shaders/lightcaster.frag");
     Shader lightCubeShader("D:/Users/wojci/CLionProjects/OpenGLPAG/res/shaders/lightcube.vert", "D:/Users/wojci/CLionProjects/OpenGLPAG/res/shaders/lightcube.frag");
 
 
