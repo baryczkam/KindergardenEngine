@@ -84,10 +84,14 @@ target_include_directories("stb_image" PRIVATE "${STB_IMAGE_DIR}")
 set(STB_IMAGE_LIBRARY "stb_image")
 set(STB_IMAGE_INCLUDE_DIR "${STB_IMAGE_DIR}")
 
-# stb_image
-set(FREE_TYPE_DIR "${THIRDPARTY_DIR}/freetype-master")
-add_library("freetype-master" STATIC "${STB_IMAGE_DIR}/stb_image.cpp")
-target_include_directories("stb_image" PRIVATE "${STB_IMAGE_DIR}")
+## stb_image
+#set(FREE_TYPE_DIR "${THIRDPARTY_DIR}/freetype-master")
+#add_library("freetype-master" STATIC "${STB_IMAGE_DIR}/stb_image.cpp")
+#target_include_directories("stb_image" PRIVATE "${STB_IMAGE_DIR}")
+#
+#set(STB_IMAGE_LIBRARY "stb_image")
+#set(STB_IMAGE_INCLUDE_DIR "${STB_IMAGE_DIR}")
 
-set(STB_IMAGE_LIBRARY "stb_image")
-set(STB_IMAGE_INCLUDE_DIR "${STB_IMAGE_DIR}")
+# rapidjson
+
+set(RAPIDJSON_INCLUDE_DIR ${THIRDPARTY_DIR}/rapidjson-master/include)

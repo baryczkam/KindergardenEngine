@@ -1,6 +1,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include <rapidjson/document.h>
+
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -10,6 +13,7 @@
 #include <model.h>
 
 #include <iostream>
+#include <mmcobj.h>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -85,6 +89,14 @@ int main()
 
     Shader lightingShader("../../res/shaders/lightcaster.vert", "../../res/shaders/lightcaster.frag");
     Shader lightCubeShader("D:/Users/wojci/CLionProjects/OpenGLPAG/res/shaders/lightcube.vert", "D:/Users/wojci/CLionProjects/OpenGLPAG/res/shaders/lightcube.frag");
+
+//    const char * json;
+//
+//
+//
+    rapidjson::Document document;
+//
+//    document.Parse(json);
 
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
