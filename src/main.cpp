@@ -93,15 +93,16 @@ int main()
     Shader ourShader("D:/Users/wojci/CLionProjects/OpenGLPAG/res/shaders/model.vert", "D:/Users/wojci/CLionProjects/OpenGLPAG/res/shaders/model.frag");
 
     Shader lightingShader("../../res/shaders/lightcaster.vert", "../../res/shaders/lightcaster.frag");
+    Shader testShader("../../res/shaders/basic.vert", "../../res/shaders/basic.frag");
     Shader lightCubeShader("D:/Users/wojci/CLionProjects/OpenGLPAG/res/shaders/lightcube.vert", "D:/Users/wojci/CLionProjects/OpenGLPAG/res/shaders/lightcube.frag");
 
-//    const char * json;
+    const char* json;
 //
 //
 //
     rapidjson::Document document;
 //
-//    document.Parse(json);
+
 
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
@@ -163,6 +164,18 @@ int main()
             glm::vec3( 1.5f,  0.2f, -1.5f),
             glm::vec3(-1.3f,  1.0f, -1.5f)
     };
+
+    float quadVertices[] = {
+            // pozycje       // kolory
+            -0.5f,  0.5f,  1.0f, 0.0f, 0.0f,
+            0.5f, -0.5f,  0.0f, 1.0f, 0.0f,
+            -0.5f, -0.5f,  0.0f, 0.0f, 1.0f,
+
+            -0.5f,  0.5f,  1.0f, 0.0f, 0.0f,
+            0.5f, -0.5f,  0.0f, 1.0f, 0.0f,
+            0.5f,  0.5f,  0.0f, 1.0f, 1.0f
+    };
+
     // first, configure the cube's VAO (and VBO)
     unsigned int VBO, cubeVAO;
     glGenVertexArrays(1, &cubeVAO);
@@ -188,6 +201,31 @@ int main()
     // note that we update the lamp's position attribute's stride to reflect the updated buffer data
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+
+    unsigned int quadVAO, quadVBO;
+    glGenVertexArrays(1, &quadVAO);
+    glGenBuffers(1, &quadVBO);
+    glBindVertexArray(quadVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(2 * sizeof(float)));
+    // also set instance data
+    glEnableVertexAttribArray(2);
+
+
+
+
+
+
+
+
+
+
+
+
 
     // load textures (we now use a utility function to keep the code more organized)
     // -----------------------------------------------------------------------------
@@ -300,6 +338,12 @@ int main()
         lightingShader.setMat4("model", model);
         glBindTexture(GL_TEXTURE_2D, texturekupa);
         glDrawArrays(GL_TRIANGLES, 0, 36);
+
+
+        testShader.use();
+        glBindVertexArray(quadVAO);
+        glDrawArrays(GL_TRIANGLES,0,6);
+        glBindVertexArray(0);
 
         /*
 

@@ -1,18 +1,14 @@
 #version 460 core
 
-layout(location = 0) in vec3 in_pos;
-layout(location = 1) in vec3 in_color;
+layout (location = 0) in vec2 aPos;
+layout (location = 1) in vec3 aColor;
 
-layout(location = 0) out vec3 out_color;
+out vec3 fColor;
 
-uniform float u_scale;
-
-uniform mat4 u_model;
-uniform mat4 u_view;
-uniform mat4 u_proj;
+uniform vec2 offsets[100];
 
 void main()
 {
-    out_color = in_color;
-    gl_Position = u_model * vec4(in_pos * u_scale, 1.0);
+    gl_Position = vec4(aPos, 0.0, 1.0);
+    fColor = aColor;
 }
