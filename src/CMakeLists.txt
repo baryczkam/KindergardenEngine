@@ -21,6 +21,9 @@ target_include_directories(${PROJECT_NAME} PUBLIC "${GLM_INCLUDE_DIR}")
 target_include_directories(${PROJECT_NAME} PUBLIC "${IMGUI_INCLUDE_DIR}")
 target_include_directories(${PROJECT_NAME} PUBLIC "${STB_IMAGE_INCLUDE_DIR}")
 target_include_directories(${PROJECT_NAME} PUBLIC "${RAPIDJSON_INCLUDE_DIR}")
+target_include_directories(${PROJECT_NAME} PUBLIC "${FREETYPE_INCLUDE_DIR}")
+target_include_directories(${PROJECT_NAME} PUBLIC "${IRRKLANG_INCLUDE_DIR}")
+target_include_directories(${PROJECT_NAME} PUBLIC "${OPENAL_INCLUDE_DIR}")
 
 
 target_link_libraries(${PROJECT_NAME} "${OPENGL_LIBRARY}")

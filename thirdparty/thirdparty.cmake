@@ -95,3 +95,15 @@ set(STB_IMAGE_INCLUDE_DIR "${STB_IMAGE_DIR}")
 # rapidjson
 
 set(RAPIDJSON_INCLUDE_DIR ${THIRDPARTY_DIR}/rapidjson-master/include)
+
+# freetype
+
+set(FREETYPE_INCLUDE_DIR ${THIRDPARTY_DIR}/freetype-master/include)
+
+# irrklang
+
+set(IRRKLANG_INCLUDE_DIR ${THIRDPARTY_DIR}/node-irrklang-master/deps/irrKlang/include)
+
+# openal
+
+set(OPENAL_INCLUDE_DIR ${THIRDPARTY_DIR}/openal-soft-master/include)

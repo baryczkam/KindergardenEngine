@@ -3,6 +3,11 @@
 
 #include <rapidjson/document.h>
 
+#include <freetype/freetype.h>
+
+#include <ik_ISound.h>
+
+
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
