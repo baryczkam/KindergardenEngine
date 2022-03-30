@@ -2,6 +2,8 @@
 #include <GLFW/glfw3.h>
 
 #include <rapidjson/document.h>
+#include <rapidjson/writer.h>
+#include <rapidjson/stringbuffer.h>
 
 #include <freetype/freetype.h>
 
@@ -90,17 +92,30 @@ int main()
 
     // build and compile shaders
     // -------------------------
-    Shader ourShader("D:/Users/wojci/CLionProjects/OpenGLPAG/res/shaders/model.vert", "D:/Users/wojci/CLionProjects/OpenGLPAG/res/shaders/model.frag");
+    //Shader ourShader("D:/Users/wojci/CLionProjects/OpenGLPAG/res/shaders/model.vert", "D:/Users/wojci/CLionProjects/OpenGLPAG/res/shaders/model.frag");
 
     Shader lightingShader("../../res/shaders/lightcaster.vert", "../../res/shaders/lightcaster.frag");
     Shader testShader("../../res/shaders/basic.vert", "../../res/shaders/basic.frag");
-    Shader lightCubeShader("D:/Users/wojci/CLionProjects/OpenGLPAG/res/shaders/lightcube.vert", "D:/Users/wojci/CLionProjects/OpenGLPAG/res/shaders/lightcube.frag");
+    //Shader lightCubeShader("D:/Users/wojci/CLionProjects/OpenGLPAG/res/shaders/lightcube.vert", "D:/Users/wojci/CLionProjects/OpenGLPAG/res/shaders/lightcube.frag");
 
-    const char* json;
+    const char* json = "{\"project\":\"rapidjson\",\"stars\":10}";
 //
 //
 //
     rapidjson::Document document;
+    document.Parse(json);
+
+    // 2. Modify it by DOM.
+    rapidjson::Value& s = document["stars"];
+    s.SetInt(s.GetInt() + 1);
+
+    // 3. Stringify the DOM
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+    document.Accept(writer);
+
+    // Output {"project":"rapidjson","stars":11}
+    std::cout << buffer.GetString() << std::endl;
 //
 
 
@@ -242,7 +257,7 @@ int main()
     // load models
     // -----------
     Model ourModel("../../res/models/box.obj");
-    Model myModel("../../res/models/kupa.obj");
+    //Model myModel("../../res/models/kupa.obj");
     unsigned int texture = loadTexture("../../res/textures/stone.jpg");
     unsigned int texturekupa = loadTexture("../../res/textures/win.png");
 
