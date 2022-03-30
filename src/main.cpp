@@ -5,7 +5,10 @@
 #include <rapidjson/writer.h>
 #include <rapidjson/stringbuffer.h>
 
+
 #include <freetype/freetype.h>
+#include <ft2build.h>
+#include FT_FREETYPE_H
 
 #include <ik_ISound.h>
 
@@ -96,6 +99,7 @@ int main()
 
     Shader lightingShader("../../res/shaders/lightcaster.vert", "../../res/shaders/lightcaster.frag");
     Shader testShader("../../res/shaders/basic.vert", "../../res/shaders/basic.frag");
+    Shader test2Shader("../../res/shaders/basic2.vert", "../../res/shaders/basic2.frag");
     //Shader lightCubeShader("D:/Users/wojci/CLionProjects/OpenGLPAG/res/shaders/lightcube.vert", "D:/Users/wojci/CLionProjects/OpenGLPAG/res/shaders/lightcube.frag");
 
     const char* json = "{\"project\":\"rapidjson\",\"stars\":10}";
@@ -118,7 +122,19 @@ int main()
     std::cout << buffer.GetString() << std::endl;
 //
 
+    FT_Library ft;
+    if (FT_Init_FreeType(&ft))
+    {
+        std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
+        return -1;
+    }
 
+    FT_Face face;
+    if (FT_New_Face(ft, "fonts/arial.ttf", 0, &face))
+    {
+        std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
+        return -1;
+    }
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
@@ -182,14 +198,46 @@ int main()
 
     float quadVertices[] = {
             // pozycje       // kolory
-            -0.5f,  0.5f,  1.0f, 0.0f, 0.0f,
-            0.5f, -0.5f,  0.0f, 1.0f, 0.0f,
-            -0.5f, -0.5f,  0.0f, 0.0f, 1.0f,
-
-            -0.5f,  0.5f,  1.0f, 0.0f, 0.0f,
-            0.5f, -0.5f,  0.0f, 1.0f, 0.0f,
-            0.5f,  0.5f,  0.0f, 1.0f, 1.0f
+            0.95f,  0.60f,
+            0.60f, 0.95f,
+            0.95f, 0.95f,
+            0.60f,  0.60f
     };
+
+    float x = -0.90f;
+
+    float textCords[] = {0.0f, 1.0f,
+                         1.0f, 0.0f,
+                         0.0f, 0.0f,
+                         1.0f, 1.0f};
+
+    uint32_t indices[] = {3, 1, 2,
+                          2, 0, 3 };
+
+    float normals[] = {0.0f, 1.0f, 0.0f,
+                       0.0f, 1.0f, 0.0f,
+                       0.0f, 1.0f, 0.0f,
+                       0.0f, 1.0f, 0.0f};
+
+    float bar[] = {
+            // pozycje       // kolory
+            -0.95f,  -0.95f,
+            -0.95f, -0.90f,
+            x, -0.90f,
+            x, -0.90f,
+            x,  -0.95f,
+            -0.95f,  -0.95f
+    };
+    float color[] = {
+            0.7f,0.7f,0.7f,
+            0.7f,0.7f,0.7f,
+            0.7f,0.7f,0.7f,
+            0.7f,0.7f,0.7f,
+            0.7f,0.7f,0.7f,
+            0.7f,0.7f,0.7f
+    };
+
+
 
     // first, configure the cube's VAO (and VBO)
     unsigned int VBO, cubeVAO;
@@ -217,18 +265,44 @@ int main()
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
-    unsigned int quadVAO, quadVBO;
+    unsigned int quadVAO, quadVBO1, quadVBO2, quadVBO3, quadEBO;
     glGenVertexArrays(1, &quadVAO);
-    glGenBuffers(1, &quadVBO);
     glBindVertexArray(quadVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+
+    glGenBuffers(1, &quadVBO1);
+    glBindBuffer(GL_ARRAY_BUFFER, quadVBO1);
     glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+
+//    glGenBuffers(1, &quadVBO2);
+//    glBindBuffer(GL_ARRAY_BUFFER, quadVBO2);
+//    glBufferData(GL_ARRAY_BUFFER, sizeof(normals), normals, GL_STATIC_DRAW);
+//    glEnableVertexAttribArray(1);
+//    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
+    glGenBuffers(1, &quadVBO3);
+    glBindBuffer(GL_ARRAY_BUFFER, quadVBO3);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(textCords), textCords, GL_STATIC_DRAW);
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(2 * sizeof(float)));
-    // also set instance data
-    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+
+    glGenBuffers(1, &quadEBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, quadEBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+
+    unsigned int progressVAO, progressVBO1, progressVBO2, progressEBO;
+
+    glGenVertexArrays(1, &progressVAO);
+    glBindVertexArray(progressVAO);
+
+    glGenBuffers(1, &progressVBO1);
+    glBindBuffer(GL_ARRAY_BUFFER, progressVBO1);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(bar), &bar, GL_STATIC_DRAW);
+//    glBufferSubData(GL_ARRAY_BUFFER,0, sizeof(bar), &bar);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
 
 
 
@@ -260,6 +334,7 @@ int main()
     //Model myModel("../../res/models/kupa.obj");
     unsigned int texture = loadTexture("../../res/textures/stone.jpg");
     unsigned int texturekupa = loadTexture("../../res/textures/win.png");
+    unsigned int candy = loadTexture("../../res/textures/candy.jpg");
 
     // draw in wireframe
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -357,8 +432,39 @@ int main()
 
         testShader.use();
         glBindVertexArray(quadVAO);
+        glBindTexture(GL_TEXTURE_2D, texture);
+//        glDrawArrays(GL_TRIANGLES,0,6);
+        glDrawElements(GL_TRIANGLES,GLsizei(std::size(indices)),GL_UNSIGNED_INT,0);
+        glBindVertexArray(0);
+
+
+
+
+
+        if(x < -0.50f){
+            x=x+0.01f;
+            bar[4] = x;
+            bar[6] = x;
+            bar[8] = x;
+
+            std::cout << bar[4] << " " << std::endl;
+
+        } else {
+            x = -0.90f;
+        }
+//        glGenBuffers(1, &progressVBO1);
+        glBindBuffer(GL_ARRAY_BUFFER, progressVBO1);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(bar), &bar, GL_STATIC_DRAW);
+
+        test2Shader.use();
+        glBindVertexArray(progressVAO);
+
         glDrawArrays(GL_TRIANGLES,0,6);
         glBindVertexArray(0);
+
+
+
+
 
         /*
 
